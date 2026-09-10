@@ -59,6 +59,22 @@
     });
   });
 
+  var railSteps = {
+    principios: document.getElementById("rail-step-principios"),
+    datos: document.getElementById("rail-step-datos"),
+    envio: document.getElementById("rail-step-envio")
+  };
+
+  function setRailState(states) {
+    Object.keys(railSteps).forEach(function (key) {
+      var el = railSteps[key];
+      if (!el) return;
+      var state = states[key] || "";
+      el.classList.toggle("is-current", state === "current");
+      el.classList.toggle("is-done", state === "done");
+    });
+  }
+
   var accept = document.getElementById("accept-principios");
   var formSection = document.getElementById("formulario-afiliacion");
   var acceptBox = document.querySelector(".principios-accept");
@@ -79,6 +95,11 @@
           ? "Principios aceptados. Completa el formulario a continuación."
           : "Marca la casilla para desbloquear el formulario de afiliación.";
       }
+      setRailState(
+        ok
+          ? { principios: "done", datos: "current" }
+          : { principios: "current" }
+      );
       if (ok) {
         window.requestAnimationFrame(function () {
           formSection.scrollIntoView({ behavior: "smooth", block: "nearest" });
@@ -186,12 +207,21 @@
 
       if (!ok) {
         var firstInvalid = afilForm.querySelector(
-          ".form-field.is-invalid input, .form-field.is-invalid textarea, .form-field.is-invalid .privacy-check, .form-field.is-invalid .radio-item input"
+          ".is-invalid input, .is-invalid textarea"
         );
         if (firstInvalid) firstInvalid.focus();
       }
       return ok;
     }
+
+    requiredFields.forEach(function (name) {
+      afilForm.querySelectorAll('[name="' + name + '"]').forEach(function (field) {
+        var event = field.type === "checkbox" || field.type === "radio" ? "change" : "input";
+        field.addEventListener(event, function () {
+          if (field.closest(".is-invalid")) setFieldError(name, "");
+        });
+      });
+    });
 
     function setLoading(loading) {
       if (!submitBtn) return;
@@ -210,6 +240,7 @@
         if (successEl) {
           successEl.hidden = false;
           afilForm.hidden = true;
+          setRailState({ principios: "done", datos: "done", envio: "current" });
         }
         return;
       }
@@ -246,6 +277,7 @@
             if (errorEl) errorEl.hidden = true;
             if (successEl) successEl.hidden = false;
             afilForm.hidden = true;
+            setRailState({ principios: "done", datos: "done", envio: "current" });
             if (successEl) successEl.focus && successEl.focus();
             return;
           }
