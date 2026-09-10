@@ -603,7 +603,8 @@ h4 { font-size: 0.95rem; font-family: var(--font-sans); font-weight: 700; letter
 }
 .afiliacion-panel::before {
   content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  background: linear-gradient(90deg, var(--gold), rgba(214,169,58,0.12));
+  background: linear-gradient(90deg, var(--gold), var(--red));
+  opacity: 0.85;
 }
 .panel-head { margin-bottom: 1.75rem; }
 .panel-head h2 { margin-bottom: 0.7rem; }
