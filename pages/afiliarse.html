@@ -1,6 +1,6 @@
 @@meta
 title: Afiliarse — Partido Liberal Clásico Cubano
-description: Acepta los principios rectores del Partido Liberal Clásico Cubano para continuar con tu afiliación.
+description: Acepta los principios rectores y completa el formulario de afiliación al Partido Liberal Clásico Cubano.
 canonical: afiliarse.html
 current: afiliarse
 @@
@@ -9,7 +9,7 @@ current: afiliarse
       <div class="container">
         <p class="eyebrow">Únete</p>
         <h1>Afiliarse al PLC</h1>
-        <p>Lee y acepta los principios rectores para continuar con el formulario de afiliación.</p>
+        <p>Lee y acepta los principios rectores; a continuación completa tu solicitud de afiliación en este mismo sitio.</p>
       </div>
     </section>
     <section class="section">
@@ -29,14 +29,105 @@ current: afiliarse
           </ol>
           <p><a href="./ideologia.html#principios">Ver también la sección de ideología →</a></p>
         </div>
+
         <div class="principios-accept">
           <label class="accept-check">
-            <input type="checkbox" id="accept-principios" />
+            <input type="checkbox" id="accept-principios" aria-controls="formulario-afiliacion" />
             <span>Acepto los principios rectores del Partido Liberal Clásico Cubano</span>
           </label>
-          <a id="btn-continuar" class="btn primary disabled" aria-disabled="true"
-             href="https://docs.google.com/forms/d/e/1FAIpQLSfQhMBpSswyvaWJz5ET_0UcyjGLYGwku-wxOHypv043ArO9cQ/viewform"
-             target="_blank" rel="noopener noreferrer">Continuar al formulario de afiliación</a>
+          <p class="principios-hint" id="principios-hint">Marca la casilla para desbloquear el formulario de afiliación.</p>
+        </div>
+
+        <div id="formulario-afiliacion" class="afiliacion-form is-locked" aria-hidden="true" inert>
+          <div class="afiliacion-form-inner">
+            <p class="section-label">Solicitud</p>
+            <h2>Formulario de afiliación</h2>
+            <p class="afiliacion-form-lead">Completa tus datos. Los campos marcados con <span class="req" aria-hidden="true">*</span><span class="sr-only">obligatorio</span> son obligatorios.</p>
+
+            <div class="form-success" id="afiliacion-success" hidden role="status" aria-live="polite" tabindex="-1">
+              <h3>Solicitud enviada</h3>
+              <p>Gracias por tu interés en afiliarte al Partido Liberal Clásico Cubano. Hemos recibido tu solicitud y nos pondremos en contacto contigo.</p>
+            </div>
+
+            <div class="form-error" id="afiliacion-error" hidden role="alert" aria-live="assertive">
+              <h3>No se pudo enviar</h3>
+              <p id="afiliacion-error-msg">Ha ocurrido un error. Inténtalo de nuevo en unos minutos.</p>
+            </div>
+
+            <form id="afiliacion-form" novalidate>
+              <div class="hp-field" aria-hidden="true">
+                <label for="website">Sitio web</label>
+                <input type="text" id="website" name="website" tabindex="-1" autocomplete="off" />
+              </div>
+
+              <div class="form-grid">
+                <div class="form-field form-field--full">
+                  <label for="nombre_apellidos">Nombre y Apellidos <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="nombre_apellidos" name="nombre_apellidos" required autocomplete="name" maxlength="200" />
+                  <p class="field-error" id="err-nombre_apellidos" hidden></p>
+                </div>
+
+                <div class="form-field">
+                  <label for="email">Correo electrónico <span class="req" aria-hidden="true">*</span></label>
+                  <input type="email" id="email" name="email" required autocomplete="email" maxlength="200" />
+                  <p class="field-error" id="err-email" hidden></p>
+                </div>
+
+                <div class="form-field">
+                  <label for="ciudad_pais">Ciudad/País <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="ciudad_pais" name="ciudad_pais" required autocomplete="address-level2" maxlength="200" />
+                  <p class="field-error" id="err-ciudad_pais" hidden></p>
+                </div>
+
+                <div class="form-field">
+                  <label for="telefono">Número de teléfono <span class="req" aria-hidden="true">*</span></label>
+                  <input type="tel" id="telefono" name="telefono" required autocomplete="tel" maxlength="40" />
+                  <p class="field-error" id="err-telefono" hidden></p>
+                </div>
+
+                <div class="form-field">
+                  <label for="edad">Edad <span class="req" aria-hidden="true">*</span></label>
+                  <input type="text" id="edad" name="edad" required inputmode="numeric" maxlength="20" />
+                  <p class="field-error" id="err-edad" hidden></p>
+                </div>
+
+                <div class="form-field form-field--full">
+                  <label for="aporte_comision">Qué puedes aportar y en qué Comisión de trabajo te gustaría integrarte <span class="req" aria-hidden="true">*</span></label>
+                  <textarea id="aporte_comision" name="aporte_comision" rows="4" required maxlength="4000" placeholder="Describe tu aporte y la comisión de trabajo de tu interés…"></textarea>
+                  <p class="field-error" id="err-aporte_comision" hidden></p>
+                </div>
+
+                <fieldset class="form-field form-field--full radio-fieldset">
+                  <legend id="membresia-legend">Quisieras apoyar con una membresía económica <span class="req" aria-hidden="true">*</span></legend>
+                  <div class="radio-group" role="radiogroup" aria-labelledby="membresia-legend">
+                    <label class="radio-item">
+                      <input type="radio" name="membresia_economica" value="Sí" required />
+                      <span>Sí</span>
+                    </label>
+                    <label class="radio-item">
+                      <input type="radio" name="membresia_economica" value="Ahora no me es posible" />
+                      <span>Ahora no me es posible</span>
+                    </label>
+                  </div>
+                  <p class="field-error" id="err-membresia_economica" hidden></p>
+                </fieldset>
+
+                <div class="form-field form-field--full">
+                  <label class="accept-check privacy-check">
+                    <input type="checkbox" id="accept_privacidad" name="accept_privacidad" required />
+                    <span>Acepto el tratamiento de mis datos para gestionar la afiliación al PLC <span class="req" aria-hidden="true">*</span></span>
+                  </label>
+                  <p class="field-error" id="err-accept_privacidad" hidden></p>
+                </div>
+              </div>
+
+              <div class="form-actions">
+                <button type="submit" class="btn primary" id="afiliacion-submit">
+                  Enviar solicitud de afiliación
+                </button>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </section>

@@ -17,7 +17,7 @@
 - Footer con crédito profesional a **De To'** → https://deto.llc.
 
 ### Contenido (sin inventar)
-- Mismo corpus que v1: ideología (Hayek/Friedman/Mises), 7 principios, estatutos Art. 1–16 + PDF, 6 comisiones, propuestas Estado/Economía/Sociedad, 6 ejecutivo + 5 colaboradores con bios/fotos, afiliación con Google Form, noticias vacías + `data/noticias.json`.
+- Mismo corpus que v1: ideología (Hayek/Friedman/Mises), 7 principios, estatutos Art. 1–16 + PDF, 6 comisiones, propuestas Estado/Economía/Sociedad, 6 ejecutivo + 5 colaboradores con bios/fotos, afiliación con formulario nativo → `POST /api/afiliacion`, noticias vacías + `data/noticias.json`.
 
 ### Páginas
 1. index.html — hero, pitch, 3 pilares, CTAs, ejecutivo, FAQ, noticias empty  
@@ -27,7 +27,7 @@
 5. congreso.html  
 6. comisiones.html — 6  
 7. primeras-propuestas.html  
-8. afiliarse.html — gate → Google Form  
+8. afiliarse.html — gate principios → formulario nativo (API)  
 9. miembros.html — tabs Ejecutivo / Colaboradores  
 10. contacto.html — Facebook / X / Instagram  
 11. noticias.html — empty + JSON hook  

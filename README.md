@@ -20,7 +20,7 @@ Los HTML de raíz se generan con `node build.js` a partir de:
 
 - 11 páginas HTML (`index`, ideología, estatutos, construcción, congreso, comisiones, propuestas, afiliarse, miembros, noticias, contacto)
 - `css/styles.css` — design system (navy / gold / paper, Fraunces + Outfit)
-- `js/main.js` — menú, FAQ, gate de afiliación, tabs, noticias.json
+- `js/main.js` — menú, FAQ, formulario de afiliación (POST `/api/afiliacion`), tabs, noticias.json
 - `assets/` — logo, hero, fotos, estatutos PDF, favicon SVG
 - `data/noticias.json` — feed opcional de noticias
 
@@ -29,3 +29,8 @@ Los HTML de raíz se generan con `node build.js` a partir de:
 Fiel a la documentación oficial del PLC (fundación Madrid 19 mayo 2026, presidenta Amelia Calzadilla, 7 principios, 6 ejecutivo + 5 colaboradores). Sin noticias inventadas.
 
 Sitio producido por [De To'](https://deto.llc).
+
+## Afiliación
+
+El formulario de afiliación es nativo (sin Google Forms). Tras aceptar los principios, el usuario completa el formulario en `afiliarse.html` y el cliente envía JSON a `POST /api/afiliacion`. Ver contrato en [`API.md`](./API.md).
+
