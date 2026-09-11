@@ -59,59 +59,6 @@
     });
   });
 
-  var railSteps = {
-    principios: document.getElementById("rail-step-principios"),
-    datos: document.getElementById("rail-step-datos"),
-    envio: document.getElementById("rail-step-envio")
-  };
-
-  function setRailState(states) {
-    Object.keys(railSteps).forEach(function (key) {
-      var el = railSteps[key];
-      if (!el) return;
-      var state = states[key] || "";
-      el.classList.toggle("is-current", state === "current");
-      el.classList.toggle("is-done", state === "done");
-    });
-  }
-
-  var accept = document.getElementById("accept-principios");
-  var formSection = document.getElementById("formulario-afiliacion");
-  var acceptBox = document.querySelector(".principios-accept");
-  var hint = document.getElementById("principios-hint");
-  if (accept && formSection) {
-    function unlockForm(ok) {
-      formSection.classList.toggle("is-locked", !ok);
-      formSection.classList.toggle("is-unlocked", ok);
-      formSection.setAttribute("aria-hidden", ok ? "false" : "true");
-      if (ok) {
-        formSection.removeAttribute("inert");
-      } else {
-        formSection.setAttribute("inert", "");
-      }
-      if (acceptBox) acceptBox.classList.toggle("is-accepted", ok);
-      if (hint) {
-        hint.textContent = ok
-          ? "Principios aceptados. Completa el formulario a continuación."
-          : "Marca la casilla para desbloquear el formulario de afiliación.";
-      }
-      setRailState(
-        ok
-          ? { principios: "done", datos: "current" }
-          : { principios: "current" }
-      );
-      if (ok) {
-        window.requestAnimationFrame(function () {
-          formSection.scrollIntoView({ behavior: "smooth", block: "nearest" });
-        });
-      }
-    }
-    accept.addEventListener("change", function () {
-      unlockForm(accept.checked);
-    });
-    unlockForm(accept.checked);
-  }
-
   var afilForm = document.getElementById("afiliacion-form");
   if (afilForm) {
     var submitBtn = document.getElementById("afiliacion-submit");
@@ -127,18 +74,17 @@
       "aporte_comision",
       "edad",
       "membresia_economica",
+      "accept_principios",
       "accept_privacidad"
     ];
 
     function setFieldError(name, message) {
-      var field = afilForm.querySelector('[name="' + name + '"]');
-      var wrap = field ? field.closest(".form-field") : null;
-      if (name === "accept_privacidad") {
-        wrap = document.getElementById("accept_privacidad");
-        wrap = wrap ? wrap.closest(".form-field") : null;
-      }
+      var wrap;
       if (name === "membresia_economica") {
         wrap = afilForm.querySelector(".radio-fieldset");
+      } else {
+        var field = afilForm.querySelector('[name="' + name + '"]');
+        wrap = field ? field.closest(".form-field") : null;
       }
       var err = document.getElementById("err-" + name);
       if (wrap) wrap.classList.toggle("is-invalid", !!message);
@@ -193,6 +139,7 @@
       var aporte = (afilForm.aporte_comision.value || "").trim();
       var edad = (afilForm.edad.value || "").trim();
       var membresia = selectedMembresia();
+      var principios = afilForm.accept_principios.checked;
       var priv = afilForm.accept_privacidad.checked;
 
       if (!nombre) { setFieldError("nombre_apellidos", "Indica tu nombre y apellidos."); ok = false; }
@@ -203,6 +150,7 @@
       if (!aporte) { setFieldError("aporte_comision", "Indica qué puedes aportar y en qué comisión te gustaría integrarte."); ok = false; }
       if (!edad) { setFieldError("edad", "Indica tu edad."); ok = false; }
       if (!membresia) { setFieldError("membresia_economica", "Selecciona una opción de membresía económica."); ok = false; }
+      if (!principios) { setFieldError("accept_principios", "Debes aceptar los principios rectores para afiliarte."); ok = false; }
       if (!priv) { setFieldError("accept_privacidad", "Debes aceptar el tratamiento de datos."); ok = false; }
 
       if (!ok) {
@@ -223,6 +171,15 @@
       });
     });
 
+    function showSuccess() {
+      if (errorEl) errorEl.hidden = true;
+      afilForm.hidden = true;
+      if (!successEl) return;
+      successEl.hidden = false;
+      successEl.scrollIntoView({ behavior: "smooth", block: "center" });
+      if (successEl.focus) successEl.focus();
+    }
+
     function setLoading(loading) {
       if (!submitBtn) return;
       submitBtn.disabled = loading;
@@ -237,11 +194,7 @@
 
       var honeypot = (afilForm.website && afilForm.website.value) || "";
       if (honeypot.trim()) {
-        if (successEl) {
-          successEl.hidden = false;
-          afilForm.hidden = true;
-          setRailState({ principios: "done", datos: "done", envio: "current" });
-        }
+        showSuccess();
         return;
       }
 
@@ -255,7 +208,7 @@
         aporte_comision: (afilForm.aporte_comision.value || "").trim(),
         edad: (afilForm.edad.value || "").trim(),
         membresia_economica: selectedMembresia(),
-        accept_principios: !!(accept && accept.checked),
+        accept_principios: !!afilForm.accept_principios.checked,
         accept_privacidad: !!afilForm.accept_privacidad.checked,
         website: ""
       };
@@ -274,11 +227,7 @@
         .then(function (result) {
           setLoading(false);
           if (result.data && result.data.ok === true) {
-            if (errorEl) errorEl.hidden = true;
-            if (successEl) successEl.hidden = false;
-            afilForm.hidden = true;
-            setRailState({ principios: "done", datos: "done", envio: "current" });
-            if (successEl) successEl.focus && successEl.focus();
+            showSuccess();
             return;
           }
           var msg = parseApiError(result.data, result.status);
